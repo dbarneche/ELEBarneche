@@ -1,0 +1,50 @@
+model {
+	
+	#priors for fixed effects in metabolic rate analysis
+	A        ~  dnorm(0,1.0E-6)
+	logit.Er ~  dnorm(0,1.0E-6)
+	Ei       ~  dnorm(0,1.0E-6)
+	boTc     ~  dnorm(0,1.0E-6)
+	Topt     ~  dnorm(0,1.0E-6)
+	tauB     ~  dgamma(1.0E-3,1.0E-3)
+	sigma2B  <- 1/tauB
+
+	#priors for random effects
+	for(i in 1:length(FAM)) {
+		r[i,1:4] ~ dmnorm(zero[ ], tauR[ , ])
+	}
+
+	zero[1]  <-  0
+	zero[2]  <-  0
+	zero[3]  <-  0
+	zero[4]  <-  0
+	tauR[1:4, 1:4] ~ dwish(R[ , ], 5)
+
+	R[1, 1]  <-  1
+	R[1, 2]  <-  0
+	R[1, 3]  <-  0
+	R[1, 4]  <-  0
+	R[2, 1]  <-  0
+	R[2, 2]  <-  1
+	R[2, 3]  <-  0
+	R[2, 4]  <-  0
+	R[3, 1]  <-  0
+	R[3, 2]  <-  0
+	R[3, 3]  <-  1
+	R[3, 4]  <-  0
+	R[4, 1]  <-  0
+	R[4, 2]  <-  0
+	R[4, 3]  <-  0
+	R[4, 4]  <-  1
+
+	#variance-covariance matrix
+	sigma2R[1:4, 1:4] <- inverse(tauR[ , ])
+
+	#likelihood
+	for(i in 1:length(ln.B)) {
+		ln.B[i] ~  dnorm(muB[i], tauB)
+		muB[i]  <- (boTc + r[FAM[i],3]) + (A + r[FAM[i],1])*ln.W[i] + (Ei/(1 + exp((-1)*(logit.Er + r[FAM[i],2]))))/8.62E-5*(1/293.15 - 1/Te[i]) - log(1 + (Ei/(1 + exp((-1)*(logit.Er + r[FAM[i],2]))))/(Ei - (Ei/(1 + exp((-1)*(logit.Er + r[FAM[i],2])))))*exp(Ei/8.62E-5*(1/(Topt+r[FAM[i],4]) - 1/Te[i])))
+	}
+	Er <- Ei/(1 + exp((-1)*logit.Er))
+
+}
