@@ -4,7 +4,7 @@
 One can click [here](http://doi.wiley.com/10.1111/ele.12309) for the article URL  
 
 ### Overview  
-This repository contains all analyses, figures and tables presented at the above-mentioned paper. It deals only with the individual-level metabolic rates analyses, both in the [main text]() and the [SI]().  
+This repository contains all analyses, figures and tables presented at the above-mentioned paper. It deals only with the individual-level metabolic rates analyses, both in the [main text](http://onlinelibrary.wiley.com/doi/10.1111/ele.12309/abstract) and the [SI](http://onlinelibrary.wiley.com/doi/10.1111/ele.12309/suppinfo).  
 
 * first I advise that you open your R GUI (R, RStudio, or starting on terminal) from the ELEbarneche2014.RData file...
 * ...this is an empty file that sets the absolute path to your project so everything will work independently on any machine; 
